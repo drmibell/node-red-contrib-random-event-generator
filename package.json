@@ -1,0 +1,15 @@
+{
+    "name"         : "node-red-contrib-random-event-generator",
+    "version"      : "0.0.1",
+    "description"  : "A node that generates events at random intervals",
+    "license"      : "Apache-2.0",
+    "author"       : "Michael.I. Bell",
+    "e-mail"       : "dr.m.i.bell@gmail.com",
+    "dependencies" : {},
+    "keywords"     : [ "random", "event", "interval"],
+    "node-red"     : {
+        "nodes": {
+            "event": "event.js"
+        }
+    }
+}

@@ -1,0 +1,10 @@
+Random event generator
+
+This flow generates messages at random intervals, with a specified average interval. The probability of a given interval between events is an exponentially decreasing function of the length of the interval. This is the behaviour displayed by radioactive decays, the arrivals of customers at a service desk, etc. The flow was developed for testing nodes that create and manipulate message queues.
+
+When a message is injected into the `function` node (`random delay`), the `msg.payload` is interpreted as the desired mean interval (in seconds). The function sets `msg.delay` to the randomly selected interval and releases the message after that delay. If the `gate` node (`continuous`) is open (after having received a `run` command), the message is fed back to the input of the `random delay` function and triggers a new message. The process can be stopped by injecting a `stop` command into the `gate`.
+
+Requires `gate` node (node-red-contrib-simple-gate).
+
+
+
