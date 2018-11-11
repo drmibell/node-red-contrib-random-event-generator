@@ -28,18 +28,12 @@ module.exports = function(RED) {
         // Save "this" object
         var node = this;
         var distribution = node.distribution;
-//        node.meanInterval = parameterTest(node.meanInterval);
-//        node.maxInterval = parameterTest(node.maxInterval);
-//        node.minInterval = parameterTest(node.minInterval);
         var mean = node.meanInterval || 1;
         var min = node.minInterval || 1;
         var max = node.maxInterval || 2;
         var context = node.context();
         var msgToSend = null;
         var run = context.get('state') || false;
-//        node.warn(mean);
-//        node.warn(min);
-//        node.warn(max);
         
         node.on('input', function(msg) {
             if (msg.topic.toLowerCase() === 'control') {
@@ -62,11 +56,6 @@ module.exports = function(RED) {
                 node.send(msgToSend);
             if (context.get('state')) {
                 var msgToSend = context.get('output');
-//                msgToSend.distribution = distribution;
-//            msgToSend.distribution = (distribution = 'exponential') ? distribution +', '+ mean : distribution + min +'-'+ max;
-//                var distProperty = (distribution = 'exponential') ? distribution +', '+ mean : distribution + min +'-'+ max;
-//                msgToSend.distribution = distProperty;
-//            node.warn(distribution);
                 switch (distribution) {
                     case 'exponential':
                         delay = expInterval(mean);
@@ -78,15 +67,12 @@ module.exports = function(RED) {
                         node.error('No distribution specified');
                         return
                 }
-//                node.warn(delay);
-//                node.warn(typeof delay);
                 msgToSend.payload = node.outputPayload;
                 
                 if (msgToSend.payload === 'timestamp') {
                     msgToSend.payload = Date.parse (new Date());
 
                 }
-//                msgToSend.payload = Date.parse (new Date());
                 msgToSend.topic = node.outputTopic;
                 msgToSend.delay = delay;
                 context.set('output',msgToSend);
@@ -106,16 +92,6 @@ module.exports = function(RED) {
         function uniformInterval(min,max) {
             return Math.random() * (max - min) + min;
         }
-        
-/*
-        function parameterTest(x) {
-            if (x < 0) {
-                node.warn('Negative parameter replaced with absolute value');
-                return -x
-            }
-        }
-*/            
-
     }
     RED.nodes.registerType("event",RandomEventNode);
 }
