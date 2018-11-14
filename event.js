@@ -42,7 +42,11 @@ module.exports = function(RED) {
                 return null;
             }
             context.set('state',run);
-            node.status({fill:(run) ? 'green':'red'});
+            if (run) {
+                node.status({fill:'green',shape:'dot'});
+            } else {
+                node.status({fill:'red',shape:'ring'});
+            }
             context.set('output',msg);
             loop();
             })
