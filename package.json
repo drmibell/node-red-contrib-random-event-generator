@@ -1,6 +1,6 @@
 {
     "name"         : "node-red-contrib-random-event-generator",
-    "version"      : "0.0.1",
+    "version"      : "0.0.2",
     "description"  : "A node that generates events at random intervals",
     "license"      : "Apache-2.0",
     "author"       : "Michael.I. Bell",
