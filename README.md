@@ -1,7 +1,7 @@
 # node-red-contrib-random-event-generator
 A Node-RED node for generating events at random intervals.
 ## Install
-Either use the Manage Palette option in the Node-RED Editor menu, or run the following command in your Node-RED user directory (typically `~/.node-red`):
+Either use the Manage Palette option in the Node-RED Editor menu or run the following command in your Node-RED user directory (typically `~/.node-red`):
 
     npm install node-red-contrib-random-event-generator
 ## Usage
@@ -13,7 +13,7 @@ Messages with the topic <code>Control Topic</code> are control messages, which t
 the generator on or off. The output messages have a user-defined topic (default: `event`) and payload (default: `timestamp`) and the additional property `msg.delay`, which is the time since the previous event.
 
 The node has been useful in testing the operation of message queues and in Monte-Carlo simulation of physical systems.
-# Node status
+## Node status
 The state of the node is indicated by a status object, a red dot when the generator is stopped and a green dot with the value of the current interval when it is running.
 ## Examples
 This flow demonstrates the basic operation of the `event` node. The average interval between events is calculated with `node-red-contrib-statistics`. This can be omitted, but the user may be interested in seeing how quickly the average converges to its expected value.
