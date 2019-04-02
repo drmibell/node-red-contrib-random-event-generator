@@ -14,7 +14,7 @@ the generator on or off. The output messages have a user-defined topic (default:
 
 The node has been useful in testing the operation of message queues and in Monte-Carlo simulation of physical systems.
 ## Node status
-The state of the node is indicated by a status object, a red dot when the generator is stopped and a green dot with the value of the current interval when it is running.
+The state of the node is indicated by a status object, a red ring when the generator is stopped and a green dot with the value of the current interval when it is running.
 ## Examples
 This flow demonstrates the basic operation of the `event` node. The average interval between events is calculated with `node-red-contrib-statistics`. This can be omitted, but the user may be interested in seeing how quickly the average converges to its expected value.
 ```
