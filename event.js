@@ -49,8 +49,12 @@ module.exports = function(RED) {
             }
             context.set('output',msg);
             loop();
-            })
-            
+        })
+        
+        node.on('close',function(){
+            clearTimeout(startTimer)
+        })
+        
         function loop() {
             var delay = 0
             msgToSend = context.get('output');
@@ -80,7 +84,7 @@ module.exports = function(RED) {
                 msgToSend.topic = node.outputTopic;
                 msgToSend.delay = delay;
                 context.set('output',msgToSend);
-                setTimeout(loop,1000 * delay);
+                var startTimer = setTimeout(loop,1000 * delay);
                 node.status({fill:'green',text:delay.toFixed(2)});
             }
         }
