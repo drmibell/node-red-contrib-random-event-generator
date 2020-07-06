@@ -45,7 +45,7 @@ module.exports = function(RED) {
             if (run) {
                 node.status({fill:'green',shape:'dot'});
             } else {
-                node.status({fill:'red',shape:'ring'});
+                node.status({fill:'red',shape:'ring',text:'stopped'});
             }
             context.set('output',msg);
             loop();
