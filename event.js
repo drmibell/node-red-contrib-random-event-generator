@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 M. I. Bell
+ * Copyright 2017-2020 M. I. Bell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
         // Copy configuration items
         this.controlTopic = config.controlTopic.toLowerCase();
+        this.startCmd = config.startCmd.toLowerCase();  // debug
+        this.stopCmd = config.stopCmd.toLowerCase();    // debug
         this.distribution = config.distribution;
         this.meanInterval = Math.abs(parseFloat(config.meanInterval)); //seconds
         this.minInterval = Math.abs(parseFloat(config.minInterval));
@@ -37,7 +39,17 @@ module.exports = function(RED) {
         
         node.on('input', function(msg) {
             if (msg.topic.toLowerCase() === 'control') {
-                run = ! run;
+                var cmd = msg.payload.toLowerCase() || "";  // debug
+                switch (cmd) {
+                    case node.startCmd:
+                        run = true;
+                        break
+                    case node.stopCmd:
+                        run = false;
+                        break
+                    default:
+                        run = ! run;
+                }
             } else {
                 return null;
             }
