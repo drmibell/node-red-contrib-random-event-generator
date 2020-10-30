@@ -34,6 +34,7 @@ module.exports = function(RED) {
         var context = node.context();
         var msgToSend = null;
         var run = context.get('state') || false;
+        var startTimer;
         
         node.on('input', function(msg) {
             if (msg.topic.toLowerCase() === 'control') {
@@ -84,7 +85,7 @@ module.exports = function(RED) {
                 msgToSend.topic = node.outputTopic;
                 msgToSend.delay = delay;
                 context.set('output',msgToSend);
-                var startTimer = setTimeout(loop,1000 * delay);
+                startTimer = setTimeout(loop,1000 * delay);
                 node.status({fill:'green',text:delay.toFixed(2)});
             }
         }
