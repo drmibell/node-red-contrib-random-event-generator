@@ -53,7 +53,8 @@ module.exports = function(RED) {
         })
         
         node.on('close',function(){
-            clearTimeout(startTimer)
+            clearTimeout(startTimer);
+            node.status({fill:'red',shape:'ring',text:'stopped'});
         })
         
         function loop() {
