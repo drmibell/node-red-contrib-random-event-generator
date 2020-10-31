@@ -19,8 +19,8 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
         // Copy configuration items
         this.controlTopic = config.controlTopic.toLowerCase();
-        this.startCmd = config.startCmd.toLowerCase();  // debug
-        this.stopCmd = config.stopCmd.toLowerCase();    // debug
+        this.startCmd = config.startCmd.toLowerCase();
+        this.stopCmd = config.stopCmd.toLowerCase();
         this.distribution = config.distribution;
         this.meanInterval = Math.abs(parseFloat(config.meanInterval)); //seconds
         this.minInterval = Math.abs(parseFloat(config.minInterval));
@@ -35,25 +35,27 @@ module.exports = function(RED) {
         var max = node.maxInterval || 2;
         var context = node.context();
         var msgToSend = null;
-        var run = context.get('state') || false;
+        var run = context.get('run') || false;
         
         node.on('input', function(msg) {
-            if (msg.topic.toLowerCase() === 'control') {
-                var cmd = msg.payload.toLowerCase() || "";  // debug
-                switch (cmd) {
-                    case node.startCmd:
-                        run = true;
-                        break
-                    case node.stopCmd:
-                        run = false;
-                        break
-                    default:
-                        run = ! run;
-                }
-            } else {
+            if (typeof msg.topic === 'undefined' || typeof msg.payload === 'undefined') {
                 return null;
             }
-            context.set('state',run);
+            if (msg.topic.toLowerCase() !== node.controlTopic) {
+                return null;
+            }
+            // Change state
+            switch (msg.payload.toLowerCase()) {
+                case node.startCmd:
+                    run = true;
+                    break;
+                case node.stopCmd:
+                    run = false;
+                    break;
+                default:
+                    run = ! run;
+            }
+            context.set('run',run);
             if (run) {
                 node.status({fill:'green',shape:'dot'});
             } else {
@@ -70,11 +72,11 @@ module.exports = function(RED) {
         function loop() {
             var delay = 0
             msgToSend = context.get('output');
-            if (msgToSend.topic.toLowerCase() === 'control') {
+            if (typeof msgToSend.topic !== 'undefined' && msgToSend.topic.toLowerCase() === node.controlTopic) {
                 msgToSend = null;
             }
                 node.send(msgToSend);
-            if (context.get('state')) {
+            if (context.get('run')) {
                 var msgToSend = context.get('output');
                 switch (distribution) {
                     case 'exponential':
