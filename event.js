@@ -36,6 +36,8 @@ module.exports = function(RED) {
         var context = node.context();
         var msgToSend = null;
         var run = context.get('run') || false;
+        var run = context.get('state') || false;
+        var startTimer
         
         node.on('input', function(msg) {
             if (typeof msg.topic === 'undefined' || typeof msg.payload === 'undefined') {
@@ -66,7 +68,8 @@ module.exports = function(RED) {
         })
         
         node.on('close',function(){
-            clearTimeout(startTimer)
+            clearTimeout(startTimer);
+            node.status({fill:'red',shape:'ring',text:'stopped'});
         })
         
         function loop() {
@@ -98,7 +101,7 @@ module.exports = function(RED) {
                 msgToSend.topic = node.outputTopic;
                 msgToSend.delay = delay;
                 context.set('output',msgToSend);
-                var startTimer = setTimeout(loop,1000 * delay);
+                startTimer = setTimeout(loop,1000 * delay);
                 node.status({fill:'green',text:delay.toFixed(2)});
             }
         }
