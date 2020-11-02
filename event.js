@@ -45,7 +45,7 @@ module.exports = function(RED) {
                 return null;
             }
             // Change state
-            switch (msg.payload.toLowerCase()) {
+            switch (msg.payload.toString().toLowerCase()) {
                 case node.startCmd:
                     run = true;
                     break;
