@@ -40,6 +40,12 @@
         },
         labelStyle: function() {
             return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function() {
+            var node = this
+            const version = 
+            RED.nodes.registry.getModule("node-red-contrib-random-event-generator").version
+            $('#node-version').append(` ${version}`)
         }
     });
 </script>
@@ -53,10 +59,10 @@
 <!-- commands -->
     <div><b>Commands (case insensitive):</b></div>
     <div class="form-row">
-        <label for="node-input-startCmd"><i class="fa fa-hourglass-start"></i> Start</label>
+        <label for="node-input-startCmd"><i class="fa fa-play"></i> Start</label>
         <input type="text" id="node-input-startCmd" placeholder="start" style="width:20%;">
         <span>&emsp;&emsp;&emsp;&emsp;</span>
-        <label for="node-input-stopCmd"><i class="fa fa-hand-stop-o"></i> Stop </label>
+        <label for="node-input-stopCmd"><i class="fa fa-stop"></i> Stop </label>
         <input type="text" id="node-input-stopCmd" placeholder="stop" style="width:20%;">
     </div>
     <div><i class="fa fa-arrows-v"></i>&nbsp; 
@@ -79,13 +85,12 @@
          seconds </div>
     <br/>
     <div>Uniform distribution:</div>
-<!-- minInterval -->
+<!-- minInterval & maxInterval -->
     <div class="form-row">
         <label for="node-input-minInterval"><i class="fa fa-clock-o"></i> Minimum </label>
         <input type="number" id="node-input-minInterval" placeholder=1 style="text-align:center;
-         width:15%"> seconds</div>
-<!-- maxInterval -->
-    <div class="form-row">
+         width:15%"> seconds
+        <span>&emsp;&emsp;&emsp;&emsp;</span>
         <label for="node-input-maxInterval"><i class="fa fa-clock-o"></i> Maximum </label> 
         <input type="number" id="node-input-maxInterval" placeholder=2 style="text-align:center;width:15%">
               seconds</div>
@@ -93,23 +98,25 @@
     <div>Output message:</div>
     <div class="form-row">
          <label for="node-input-outputPayload"><i class="fa fa-envelope"></i> Payload</label>
-         <input type="text" id="node-input-outputPayload" placeholder="timestamp" style="width:50%">
+         <input type="text" id="node-input-outputPayload" placeholder="timestamp">
      </div>
     <div class="form-row">
          <label for="node-input-outputTopic"><i class="fa fa-tasks"></i> Topic</label>
          <input type="text" id="node-input-outputTopic" placeholder="event">
      </div>
     <br/>
-<!-- Name -->  
+<!-- Name & Version-->  
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <input type="text" id="node-input-name" placeholder="Name" style="width:50%">
+        <span>&emsp;&emsp;</span>
+        <label id="node-version" style="width:auto" >Version</label>
     </div>
 </script>
 
 <script type="text/x-red" data-help-name="event">
     <p>Generates messages at random intervals.</p>
-    <p>The interval between output messages is drawn from a random distribution, which can
+    <p>The interval between output messages is drawn from a random distribution that can
     be selected to be exponential with a given average or uniform in a selected range.
      (Negative intervals are converted to their absolute values.)</p>
     <p>Messages with the topic <code>Control Topic</code> are control messages, which start
