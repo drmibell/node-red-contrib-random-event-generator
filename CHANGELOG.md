@@ -1,0 +1,16 @@
+- 0.1.1 (2021.03.20)
+    - Edit dialog: change icons
+    - Edit dialog: add version number 
+    - Edit dialog: update help text
+- 0.1.0 (2020-11-02)
+    - Handle undefined payload and topic.
+    - Handle numeric and boolean payloads.
+    - Add start and stop commands.
+    - Fix scope of timer variables.
+    - Clear timeout on close.
+    - Add text to status for stopped state.
+- 0.0.3 (2019-01-03) Fix README format.
+- 0.0.2 (2018-11-13)
+    - Change status shape to ring for stopped state.
+    - Add "node-red" keyword.
+- 0.0.1 (2018-11-11) Initial commit.
