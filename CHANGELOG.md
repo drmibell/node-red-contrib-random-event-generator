@@ -7,7 +7,7 @@
     - Clone output messages.
     - README: update and add numerical methods.
     - Update example flow.
-- 0.1.1 (2021.03.20)
+- 0.1.1 (2021-03-20)
     - Edit dialog: change icons.
     - Edit dialog: add version number.
     - Edit dialog: update help text.
