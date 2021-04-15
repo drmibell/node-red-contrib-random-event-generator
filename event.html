@@ -1,5 +1,5 @@
 <!--
-  Copyright 2018-2020 M. I. Bell
+  Copyright 2018-2021 M. I. Bell
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -23,12 +23,16 @@
             controlTopic: {value:"control"},
             startCmd: {value:"start"},
             stopCmd: {value:"stop"},
-            meanInterval: {value:1},
             distribution: {value:"exponential"},
-            minInterval: {value:1},
-            maxInterval: {value:2},
+            expMeanInterval: {value:1, validate:function(v){return v > 0}},
+            minInterval: {value:1, validate:function(v){return v > 0}},
+            maxInterval: {value:2, validate:function(v){return v > 0}},
+            gaussMeanInterval: {value:1, validate:function(v){return v > 0}},
+            stdDev: {value:1, validate:function(v){return v > 0}},
             outputTopic: {value:"event"},
-            outputPayload: {value:"timestamp"}
+            outputPayload: {validate:RED.validators.typedInput('outputPayloadType')},
+            outputPayloadType: {value:'date'},
+            maxEventCount: {value:0, validate:function(v){return Number.isInteger(Number(v))}}
         },
         inputs:1,
         outputs:1,
@@ -42,7 +46,36 @@
             return this.name?"node_label_italic":"";
         },
         oneditprepare: function() {
-            var node = this
+//            var node = this
+            // configure event payload
+            $("#node-input-outputPayload").typedInput({
+//                type:"str",
+                default: 'date',
+                types: ['date','str','num','bool','json'],
+                typeField: $("#node-input-outputPayloadType")
+            });
+            // configure distribution parameters
+            $("#node-input-distribution").change(function() {
+                var distribution = $("#node-input-distribution").val();
+                switch (distribution) {
+                    case "exponential":
+                      $(".exponential-row").show();
+                      $(".uniform-row").hide();
+                      $(".gaussian-row").hide();
+                      break;
+                    case "uniform":
+                      $(".exponential-row").hide();
+                      $(".uniform-row").show();
+                      $(".gaussian-row").hide();
+                      break;
+                    case "gaussian":
+                      $(".exponential-row").hide();
+                      $(".uniform-row").hide();
+                      $(".gaussian-row").show();
+                      break;
+                }
+            });
+            // configure version number
             const version = 
             RED.nodes.registry.getModule("node-red-contrib-random-event-generator").version
             $('#node-version').append(` ${version}`)
@@ -50,55 +83,82 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="event">
+<script type="text/html" data-template-name="event">
 <!-- controlTopic -->
     <div class="form-row">
          <label for="node-input-controlTopic"><i class="fa fa-cog"></i> Control Topic</label>
          <input type="text" id="node-input-controlTopic" placeholder="control">
      </div>
+     <br/>
 <!-- commands -->
     <div><b>Commands (case insensitive):</b></div>
     <div class="form-row">
-        <label for="node-input-startCmd"><i class="fa fa-play"></i> Start</label>
+        <label for="node-input-startCmd" style = "width:auto"><i class="fa fa-play"></i> Start&nbsp;</label>
         <input type="text" id="node-input-startCmd" placeholder="start" style="width:20%;">
         <span>&emsp;&emsp;&emsp;&emsp;</span>
-        <label for="node-input-stopCmd"><i class="fa fa-stop"></i> Stop </label>
+        <label for="node-input-stopCmd" style = "width:auto"><i class="fa fa-stop"></i> Stop&nbsp;</label>
         <input type="text" id="node-input-stopCmd" placeholder="stop" style="width:20%;">
     </div>
     <div><i class="fa fa-arrows-v"></i>&nbsp; 
     Toggle: any payload other than a Start or Stop command
     </div>
-    <br/>
-<!--distribution -->   
+ <!-- max event count -->
     <div class="form-row">
-        <label for="node-input-distribution"><i class="fa fa-area-chart"></i> Distribution</label>
-        <select type="text" id="node-input-distribution" style="width:25%">
-            <option value="exponential"> exponential</option>
-            <option value="uniform"> uniform</option>
-        </select> </div>
-    <br/>
-    <div>Exponential distribution:</div>
-<!-- meanInterval -->
-    <div class="form-row">
-        <label for="node-input-meanInterval"><i class="fa fa-clock-o"></i> Average </label>
-        <input type="number" id="node-input-meanInterval" placeholder="1" style="text-align:center; width:15%">
-         seconds </div>
-    <br/>
-    <div>Uniform distribution:</div>
-<!-- minInterval & maxInterval -->
-    <div class="form-row">
-        <label for="node-input-minInterval"><i class="fa fa-clock-o"></i> Minimum </label>
-        <input type="number" id="node-input-minInterval" placeholder=1 style="text-align:center;
-         width:15%"> seconds
+        <label for="node-input-maxEventCount" style = "width:auto"><i class="fa fa-exclamation-triangle"></i> 
+        Stop after&nbsp;</label>
+        <input type="number" id="node-input-maxEventCount" placeholder="0" style="text-align:center; width:12%">
+        &nbsp; events (< 1, no limit)
         <span>&emsp;&emsp;&emsp;&emsp;</span>
-        <label for="node-input-maxInterval"><i class="fa fa-clock-o"></i> Maximum </label> 
-        <input type="number" id="node-input-maxInterval" placeholder=2 style="text-align:center;width:15%">
-              seconds</div>
+    </div>
     <br/>
-    <div>Output message:</div>
+<!--distribution -->
+    <div><b>Distribution:</b></div>
+    <div class="form-row">
+        <label for="node-input-distribution" style = "width:auto" ><i class="fa fa-area-chart"></i> 
+        Type&nbsp;</label>
+        <select type="text" id="node-input-distribution" style="width:20%">
+            <option value="exponential">exponential</option>
+            <option value="uniform">uniform</option>
+            <option value="gaussian">gaussian</opton>
+        </select> 
+<!-- Exponential distribution: expMeanInterval-->
+        <span>&emsp;&emsp;&emsp;&emsp;</span>
+    <span class="form-row exponential-row">
+        <label for="node-input-expMeanInterval" style="width:auto"><i class="fa fa-clock-o"></i> 
+        Average interval&nbsp;</label>
+        <input type="number" id="node-input-expMeanInterval" placeholder="1" min = 0 
+        style="text-align:center; width:10%"> seconds 
+    </span>
+    </div>
+<!--Uniform distribution: minInterval & maxInterval-->
+    <div class="form-row uniform-row">
+        <label for="node-input-minInterval" style="width:auto"><i class="fa fa-clock-o"></i>
+        Min interval&nbsp;</label>
+        <input type="number" id="node-input-minInterval" placeholder=1 min = 0 
+        style="text-align:center; width:10%"> seconds
+        <span>&emsp;&emsp;&emsp;&emsp;</span>
+        <label for="node-input-maxInterval" style="width:auto"><i class="fa fa-clock-o"></i>
+        Max interval&nbsp;</label> 
+        <input type="number" id="node-input-maxInterval" placeholder=2 min = 0 
+        style="text-align:center;width:10%"> seconds
+    </div>
+<!-- Gaussian distribution: gaussMeanInterval and stdDev -->
+    <div class="form-row gaussian-row">
+        <label for="node-input-gaussMeanInterval" style="width:auto"><i class="fa fa-clock-o"></i> 
+        Mean interval&nbsp;</label>
+        <input type="number" id="node-input-gaussMeanInterval" placeholder=1 min = 0 
+        style="text-align:center; width:10%"> seconds
+        <span>&emsp;&emsp;&emsp;&emsp;</span>
+        Standard deviation&nbsp;</label> 
+        <input type="number" id="node-input-stdDev" placeholder=1 min = 0 
+        style="text-align:center;width:10%"> seconds
+    </div>
+    <br/>
+    <div><b>Output:</b></div>
     <div class="form-row">
          <label for="node-input-outputPayload"><i class="fa fa-envelope"></i> Payload</label>
-         <input type="text" id="node-input-outputPayload" placeholder="timestamp">
+         <input type="text" id="node-input-outputPayload" style="width:70%">
+         <input type="hidden" id="node-input-outputPayloadType">
      </div>
     <div class="form-row">
          <label for="node-input-outputTopic"><i class="fa fa-tasks"></i> Topic</label>
@@ -114,13 +174,23 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="event">
+<script type="text/html" data-help-name="event">
     <p>Generates messages at random intervals.</p>
+    <h3>Details</h3>
     <p>The interval between output messages is drawn from a random distribution that can
-    be selected to be exponential with a given average or uniform in a selected range.
-     (Negative intervals are converted to their absolute values.)</p>
+    be selected to be exponential with a given average, uniform in a selected range, or 
+    gaussian (normal) with specified mean and standard deviation.</p>
     <p>Messages with the topic <code>Control Topic</code> are control messages, which start
-    or stop the generator or toggle its state.<p>
-    <p>The output messages have a user-defined topic and payload and the additional property
-    <code>msg.delay</code>, which is the time since the last event. </p>
+    or stop the generator or toggle its state. The generator can also be configured to stop after
+    a specified number of events.<p>
+    <p>The output messages have a user-defined topic and payload and two additional properties,
+    <code>msg.delay</code>, which is the time since the previous event, and <code>msg.count</code>,
+    which is the position of the event in the sequence sent since the generator was last started.
+    </p>
+    <h3>Examples</h3>
+    Flows illustrating the use of this node are provided in the <code>examples</code> tab
+    of the <span style="white-space:nowrap"><i class="fa fa-bars"></i>&nbsp;<b>Import</b></span>
+    sub-menu and can also be obtained from 
+    <a href="https://github.com/drmibell/node-red-contrib-random-event-generator/tree/master/examples">
+    GitHub</a>.
 </script>
