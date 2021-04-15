@@ -1,12 +1,21 @@
+- 1.0.0 (2021-03-xx)
+    - Add gaussian distribution.
+    - Handle case where min >= max in uniform distribution.
+    - Edit dialog: hide unused parameters.
+    - Stop after specified event count.
+    - Add `msg.count` property.
+    - Clone output messages.
+    - README: update and add numerical methods.
+    - Update example flow.
 - 0.1.1 (2021.03.20)
-    - Edit dialog: change icons
-    - Edit dialog: add version number 
-    - Edit dialog: update help text
+    - Edit dialog: change icons.
+    - Edit dialog: add version number.
+    - Edit dialog: update help text.
 - 0.1.0 (2020-11-02)
     - Handle undefined payload and topic.
     - Handle numeric and boolean payloads.
-    - Add start and stop commands.
-    - Fix scope of timer variables.
+    - Add start and stop commands. Fixes [#2](https://github.com/drmibell/node-red-contrib-random-event-generator/issues/2)
+    - Fix scope of timer variables. Fixes [#1](https://github.com/drmibell/node-red-contrib-random-event-generator/issues/1)
     - Clear timeout on close.
     - Add text to status for stopped state.
 - 0.0.3 (2019-01-03) Fix README format.
