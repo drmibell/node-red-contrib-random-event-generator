@@ -1,4 +1,4 @@
-- 1.0.0 (2021-03-xx)
+- 1.0.0 (2021-03-15)
     - Add gaussian distribution.
     - Handle case where min >= max in uniform distribution.
     - Edit dialog: hide unused parameters.
