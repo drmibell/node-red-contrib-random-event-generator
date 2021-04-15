@@ -32,7 +32,7 @@ The exponential and gaussian distributions are calculated from the uniform distr
 
 Samples from an exponential distribution with mean *m* are given by
 <div align = "center">
-*u = - m* * Math.log(Math.random())
+<i>u</i> = - <i>m</i> * Math.log(Math.random())
 </div>
 
 Samples from a gaussian distribution are obtained by the Box–Muller method.
