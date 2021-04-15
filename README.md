@@ -23,18 +23,15 @@ All three distributions, exponential, uniform, and gaussian, are calculated from
 
 
 Samples from the uniform distribution in the interval [*min*,*max*) are obtained from the obvious relation
-
 <div align="center">
 <i>u</i> = Math.random() * (<i>max</i> - <i>min</i>) + <i>min</i>
-</div>
-
+</div></br>
 The exponential and gaussian distributions are calculated from the uniform distribution using the methods described in D.E. Knuth, *The Art of Computer Programming,* Vol. 2, Sec. 3.4.
 
 Samples from an exponential distribution with mean *m* are given by
 <div align = "center">
 <i>u</i> = - <i>m</i> * Math.log(Math.random())
-</div>
-
+</div></br>
 Samples from a gaussian distribution are obtained by the Box–Muller method.
 
 ## Examples
