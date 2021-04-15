@@ -23,17 +23,21 @@ All three distributions, exponential, uniform, and gaussian, are calculated from
 
 
 Samples from the uniform distribution in the interval [*min*,*max*) are obtained from the obvious relation
+
 <p><div align="center">
 <i>u</i> = Math.random() * (<i>max</i> - <i>min</i>) + <i>min</i>
 </div></p>
+
 The exponential and gaussian distributions are calculated from the uniform distribution using the methods described in D.E. Knuth, <i>The Art of Computer Programming</i>, Vol. 2, Sec. 3.4. Samples from an exponential distribution with mean <i>m</i> are given by
+
 <p><div align = "center">
 <i>u</i> = - <i>m</i> * Math.log(Math.random())
 </div></p>
+
 Samples from a gaussian distribution are obtained by the Box–Muller method.
 
 ## Examples
-This flow demonstrates the basic operation of the `event` node. The average interval between events and its standard deviation are calculated with [node-red-contrib-statistics] (https://flows.nodered.org/node/node-red-contrib-statistics). This part of the flow can be omitted, but the user may be interested in seeing how quickly the average converges to its expected value. Correct operation of the node can be confirmed by observing that the standard deviation approaches the mid-value of the uniform interval, the specified value for the gaussian distribution, or the the square-root of the mean in the exponential case.
+This flow demonstrates the basic operation of the `event` node. The average interval between events and its standard deviation are calculated using the contributed [statistics](https://flows.nodered.org/node/node-red-contrib-statistics) node. This part of the flow can be omitted, but the user may be interested in seeing how quickly the average converges to its expected value. Correct operation of the node can be confirmed by observing that the standard deviation approaches the mid-value of the uniform interval, the specified value for the gaussian distribution, or the the square-root of the mean in the exponential case.
 
 <img src="https://github.com/drmibell/node-red-contrib-random-event-generator/blob/master/screenshots/event-demo.png?raw=true"/>
 
