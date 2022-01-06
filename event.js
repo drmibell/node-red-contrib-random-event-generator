@@ -43,13 +43,13 @@ module.exports = function(RED) {
         let outputPayload = node.outputPayload
         let outputPayloadType = node.outputPayloadType
         let payload = RED.util.evaluateNodeProperty(outputPayload, outputPayloadType, node)
-        let msgToSend = {"count":-1}    // debug
+        let msgToSend = {"count":-1}
         let maxEventCount = node.maxEventCount
         if (maxEventCount <= 0) {maxEventCount = Infinity}
         let state = 'stopped'
         context.set('state',state)
-        let stoppedStatus = {fill:'red',shape:'ring',text:'stopped'}    // debug
-        node.status(stoppedStatus)  // debug
+        let stoppedStatus = {fill:'red',shape:'ring',text:'stopped'}
+        node.status(stoppedStatus)
         let timer, delay
 
         node.on('input', function(msg) {
@@ -66,7 +66,7 @@ module.exports = function(RED) {
                     }
                     break
                 case node.stopCmd:
-                    if (state === 'stopped') { // already stopped
+                    if (state === 'stopped') {  // already stopped
                         node.warn('command ignored: already stopped')
                         return
                     }
@@ -80,7 +80,6 @@ module.exports = function(RED) {
                     }
              }
             context.set('state',state)
-//            node.warn(distribution) // debug
             if (distribution === 'uniform' && min >= max) {
                 node.warn('must have max > min for uniform distribution')
                 return
@@ -133,7 +132,7 @@ module.exports = function(RED) {
                 if (msgToSend.count >= maxEventCount) {
                     state = 'stopped'
                     context.set('state',state)
-                    node.status(stoppedStatus)   // debug
+                    node.status(stoppedStatus)
                     return
                 }
                 timer = setTimeout(loop,1000 * delay)
@@ -141,9 +140,9 @@ module.exports = function(RED) {
             }
         }
         
-        function expInterval(m) { // see Knuth, Vol. 2, p. 133
+        function expInterval(m) {   // see Knuth, Vol. 2, p. 133
             let u = Math.random()
-            if (u === 0) {u = 5e-234}
+            if (u === 0) {u = Number.MIN_VALUE}
             return - m * Math.log(u)
         }
 
@@ -151,7 +150,7 @@ module.exports = function(RED) {
             return Math.random() * (max - min) + min
         }
         
-        function gaussianInterval(mu,sigma) { // Box–Muller method, see Knuth, Vol. 2, p. 122
+        function gaussianInterval(mu,sigma) {   // Box–Muller method, see Knuth, Vol. 2, p. 122
             let two_pi = 2 * Math.PI
             let r, z0, z1, u1, u2
             do {
