@@ -1,3 +1,5 @@
+- 1.0.1 (2022-01-06) 
+    - Replace `5e-234` with `Number.MIN_VALUE`.
 - 1.0.0 (2021-03-15)
     - Add gaussian distribution.
     - Handle case where min >= max in uniform distribution.
@@ -18,8 +20,10 @@
     - Fix scope of timer variables. Fixes [#1](https://github.com/drmibell/node-red-contrib-random-event-generator/issues/1)
     - Clear timeout on close.
     - Add text to status for stopped state.
-- 0.0.3 (2019-01-03) Fix README format.
+- 0.0.3 (2019-01-03)
+    - Fix README format.
 - 0.0.2 (2018-11-13)
     - Change status shape to ring for stopped state.
     - Add "node-red" keyword.
-- 0.0.1 (2018-11-11) Initial commit.
+- 0.0.1 (2018-11-11)
+    - Initial commit.
