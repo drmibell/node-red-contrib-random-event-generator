@@ -1,7 +1,7 @@
 # node-red-contrib-random-event-generator
 A Node-RED node for generating events at random intervals.
 ## Install
-Either use the Manage Palette option in the Node-RED Editor menu or run the following command in the Node-RED user directory (typically `~/.node-red`):
+Use the Manage Palette option in the Node-RED Editor menu or run the following command in the Node-RED user directory (typically `~/.node-red`):
 
     npm install node-red-contrib-random-event-generator
 ## Usage
@@ -16,7 +16,7 @@ The output messages have a user-defined topic (default: `event`) and payload (de
 The node has been useful in testing the operation of message queues and in Monte-Carlo simulation of physical systems.
 
 ## Node status
-The state of the node is indicated by a status object, a red ring when the generator is stopped and a green dot with the value of the current interval when it is running. If the node receives a `stop` or `toggle` command while running, the pending event will not be sent, but the status will display (and send to an attached `status ` node) the interval value corresponding to that event.
+The state of the node is indicated by a status object, a red ring when the generator is stopped and a green dot with the value of the current interval when it is running. If the node receives a `stop` or `toggle` command while running, the pending event will not be sent, but the status will display (and send to an attached `status` node) the interval value corresponding to that event.
 
 ## Numerical methods
 All three distributions, exponential, uniform, and gaussian, are calculated from the JavaScript method `Math.random()`. This function returns floating-point, pseudo-random numbers *u* that are approximately uniform in the interval [0,1). The specifics are implementation dependent, and the initial seed is chosen by the algorithm and cannot be changed or reset by the user. Hence, the results are not reliable for cryptographic or other security purposes but are adequate for routine testing or simulation. 
